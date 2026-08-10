@@ -1,0 +1,10 @@
+.aws/
+*.pem
+*.key
+.env
+.env.*
+.DS_Store
+dashboards/exported/*.json
+!dashboards/exported/README.md
+screenshots/private/
+

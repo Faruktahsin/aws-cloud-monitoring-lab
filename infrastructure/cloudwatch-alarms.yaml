@@ -1,0 +1,82 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudWatch alarms for one EC2 instance and an existing confirmed SNS topic.
+Parameters:
+  InstanceId:
+    Type: AWS::EC2::Instance::Id
+  SnsTopicArn:
+    Type: String
+  CpuThreshold:
+    Type: Number
+    Default: 80
+  MemoryThreshold:
+    Type: Number
+    Default: 85
+  DiskThreshold:
+    Type: Number
+    Default: 85
+Resources:
+  HighCpuAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Average CPU utilization is high for 15 minutes.
+      Namespace: AWS/EC2
+      MetricName: CPUUtilization
+      Dimensions: [{Name: InstanceId, Value: !Ref InstanceId}]
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 3
+      DatapointsToAlarm: 3
+      Threshold: !Ref CpuThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: missing
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+  StatusCheckFailedAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: EC2 instance or system status check failed.
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed
+      Dimensions: [{Name: InstanceId, Value: !Ref InstanceId}]
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 2
+      DatapointsToAlarm: 2
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: breaching
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+  HighMemoryAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: CloudWatch Agent reports sustained high memory utilization.
+      Namespace: CWAgent
+      MetricName: mem_used_percent
+      Dimensions: [{Name: InstanceId, Value: !Ref InstanceId}]
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 3
+      DatapointsToAlarm: 3
+      Threshold: !Ref MemoryThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+  HighDiskAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: CloudWatch Agent reports sustained high disk utilization.
+      Namespace: CWAgent
+      MetricName: disk_used_percent
+      Dimensions: [{Name: InstanceId, Value: !Ref InstanceId}]
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 3
+      DatapointsToAlarm: 3
+      Threshold: !Ref DiskThreshold
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref SnsTopicArn]
+      OKActions: [!Ref SnsTopicArn]
+
