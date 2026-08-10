@@ -24,3 +24,5 @@ jobs:
       - name: Run local configuration checks
         run: bash scripts/validate-config.sh
 
+      - name: Validate dashboard dry run
+        run: bash scripts/deploy-dashboard.sh --dry-run ec2-monitoring-dashboard i-0123456789abcdef0 eu-central-1

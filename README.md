@@ -74,11 +74,16 @@ screenshots/     Redacted live evidence placeholders
 # Validate local JSON configuration and check the alarm template
 bash scripts/validate-config.sh
 
+# Render and validate a dashboard without contacting AWS
+./scripts/deploy-dashboard.sh --dry-run ec2-monitoring-dashboard <instance-id> <region>
+
 # Deploy a dashboard (replace placeholders with your values)
 ./scripts/deploy-dashboard.sh ec2-monitoring-dashboard <instance-id> <region>
 ```
 
 Create and confirm an SNS subscription, install the CloudWatch Agent, then deploy [`infrastructure/cloudwatch-alarms.yaml`](infrastructure/cloudwatch-alarms.yaml) as described in the setup guide. Do not put resource identifiers in Git‑tracked files.
+
+For an opt-in CloudWatch Logs extension, see [optional logs integration](docs/optional-cloudwatch-logs.md). Enable it only after log paths, retention, and privacy needs have been reviewed.
 
 ## Verification path
 
