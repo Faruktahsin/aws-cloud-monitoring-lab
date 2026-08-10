@@ -7,4 +7,4 @@
 dashboards/exported/*.json
 !dashboards/exported/README.md
 screenshots/private/
-
+*.log
