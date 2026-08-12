@@ -4,11 +4,9 @@ Portfolio‑ready AWS observability case study using Amazon CloudWatch Agent, Cl
 
 > Educational, non‑commercial project. No account IDs, ARNs, email addresses, IP addresses, credentials, or unredacted console exports are tracked.
 
-## Why this repository exists
+## Overview
 
-Not every cloud engineering project needs an application. This repository documents a practical operations task: making an EC2 workload observable, defining the alerting path, and making the work reproducible instead of leaving it as undocumented console clicks.
-
-It is intended for recruiters, hiring managers, and engineers who want to see how I approach cloud monitoring, operational boundaries, and infrastructure documentation.
+This repository turns a practical EC2 observability task into reproducible, reviewable infrastructure documentation rather than leaving it as undocumented console configuration.
 
 ## Demonstrated capabilities
 
@@ -19,13 +17,12 @@ It is intended for recruiters, hiring managers, and engineers who want to see ho
 - Amazon SNS email notification workflow
 - Cost‑aware operations, least‑privilege, and evidence redaction
 
-## What this is—and is not
+## Scope
 
 | This is | This is not |
 | --- | --- |
-| A reproducible single‑instance monitoring lab and portfolio case study | A claim of a production‑scale monitoring platform |
-| A documented CloudWatch Agent, dashboard, alarm, and SNS workflow | A substitute for an on‑call process or incident‑management system |
-| A transparent record of configuration and validation steps | A repository containing private AWS account data or credentials |
+| A reproducible single‑instance monitoring case study | A claim of a production-scale monitoring platform |
+| A documented CloudWatch Agent, dashboard, alarm, and SNS workflow | An on-call or incident-management system |
 
 ## Architecture
 
@@ -38,24 +35,11 @@ flowchart LR
   Alarms --> SNS["Amazon SNS"] --> Email["Email notification"]
 ```
 
-## Live evidence model
+## Evidence
 
-Git cannot host live AWS resources. This repository shows the work through:
-1. version‑controlled configuration and infrastructure templates;
-2. sanitized dashboard definitions;
-3. redacted screenshots that prove the running resources.
+The repository combines version-controlled configuration with redacted evidence from the running lab. It includes dashboard and Agent telemetry, alarm state, confirmed SNS subscription, and a controlled CloudWatch-to-SNS delivery test.
 
-See the [setup guide](docs/setup-guide.md), [evidence gallery](docs/evidence-and-screenshots.md), [live verification record](docs/live-verification.md), [metric catalog](docs/metric-catalog.md), [decision log](docs/decision-log.md), [troubleshooting guide](docs/troubleshooting.md), [maintenance and cleanup runbook](docs/maintenance-and-cleanup.md), and [publishing checklist](docs/github-publishing-checklist.md).
-
-## Evidence maturity
-
-| Level | Meaning | Publicly tracked now |
-| --- | --- | --- |
-| Configuration | Agent JSON, dashboard template, and CloudFormation alarm definition | Yes |
-| Local validation | JSON and repository configuration checks | Yes |
-| Live verification | Redacted dashboard, focused metrics, alarm state, confirmed SNS subscription, and controlled alert delivery evidence | Yes |
-
-This distinction is intentional: templates prove design and repeatability; redacted live evidence proves the lab was actually exercised.
+See the [evidence gallery](docs/evidence-and-screenshots.md), [live verification record](docs/live-verification.md), [metric catalog](docs/metric-catalog.md), [decision log](docs/decision-log.md), [troubleshooting guide](docs/troubleshooting.md), and [maintenance and cleanup runbook](docs/maintenance-and-cleanup.md).
 
 ## Repository layout
 
@@ -101,8 +85,6 @@ The live CloudWatch dashboard is captured across three time windows. Account ide
 
 ![Three-day dashboard view](screenshots/02-dashboard-3-day.png)
 
-![Post-change dashboard confirmation (three hours)](screenshots/04-dashboard-post-change-3-hours.png)
-
 ![Controlled CloudWatch-to-SNS delivery test](screenshots/09-controlled-alarm-email.png)
 
 See the [full evidence gallery](docs/evidence-and-screenshots.md) for one-day, one-week, and post-change views.
@@ -112,13 +94,6 @@ See the [full evidence gallery](docs/evidence-and-screenshots.md) for one-day, o
 - Add CloudWatch Logs with explicit retention and a documented log‑selection rationale.
 - Manage the instance role, SNS topic, dashboard, and alarms fully through infrastructure as code.
 - Add AWS Budgets and Cost Anomaly Detection as a separate cost‑observability layer.
-- Extend controlled testing with an approved remediation and rollback workflow.
-- Expand the troubleshooting guide with an incident timeline after a controlled test.
-- Add automated template checks through GitHub Actions; this repository already includes a lightweight validation workflow.
-
-## CV‑ready description
-
-> Built an AWS EC2 monitoring lab using Amazon CloudWatch Agent, CloudWatch dashboards and alarms, and Amazon SNS email notification workflow. Implemented host-level memory, root-disk, and swap telemetry with CPU and capacity alerts, reproducible configuration, and documented cost and security controls.
 
 ## Prerequisites
 
@@ -127,11 +102,6 @@ See the [full evidence gallery](docs/evidence-and-screenshots.md) for one-day, o
 | AWS CLI | 2.0 |
 | jq | 1.6 |
 | Bash (macOS / Linux) | any recent version |
-| CloudWatch Agent | latest |
-
-## Current status
-
-The repository has been published on GitHub. Configuration, documentation, and local validation are publicly available. Redacted live dashboard, focused metric, alarm-state, and SNS-subscription evidence is now included.
 
 ---
 
