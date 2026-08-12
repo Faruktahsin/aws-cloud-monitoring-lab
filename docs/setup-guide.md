@@ -6,7 +6,7 @@ Use a non-root AWS identity with AWS CLI v2, an existing EC2 instance with an at
 
 ## 1. Configure the agent
 
-Attach `CloudWatchAgentServerPolicy` to the EC2 instance role for this lab. Install the CloudWatch Agent on the instance, then apply the tracked configuration:
+Attach `CloudWatchAgentServerPolicy` to the EC2 instance role for this lab. The instance role needs Agent publishing permissions only; dashboard, CloudFormation, and SNS administration belong to the local operator identity. Install the CloudWatch Agent on the instance, then apply the tracked configuration:
 
 ```bash
 sudo yum install -y amazon-cloudwatch-agent
@@ -33,5 +33,5 @@ aws cloudformation deploy --template-file infrastructure/cloudwatch-alarms.yaml 
 ./scripts/deploy-dashboard.sh ec2-monitoring-dashboard <instance-id> <region>
 ```
 
-Verify EC2 and `CWAgent` metrics, wait until alarms become `OK`, then capture redacted evidence. Delete the stack, dashboard, topic, and unused instance when the lab ends.
+Verify EC2 and `CWAgent` metrics, including `swap_used_percent`, wait until alarms become `OK`, then capture redacted evidence. Delete the stack, dashboard, topic, and unused instance when the lab ends.
 

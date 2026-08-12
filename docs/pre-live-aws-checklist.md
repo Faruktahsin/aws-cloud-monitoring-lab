@@ -11,7 +11,7 @@ Use this checklist before opening the AWS Console for live verification. It keep
 
 ## Live verification order
 
-1. Check for incoming `CWAgent` memory and disk metrics.
+1. Check for incoming `CWAgent` memory, root-disk, and swap metrics.
 2. Check the dashboard shows both `AWS/EC2` and `CWAgent` data.
 3. Check alarms are configured and have enough data to move to `OK`.
 4. Check the SNS subscription is confirmed.
