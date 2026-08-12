@@ -79,15 +79,57 @@ For an opt-in CloudWatch Logs extension, see [optional logs integration](docs/op
 4. Confirm the SNS email subscription, then run a documented controlled test before treating notifications as delivered.
 5. Add the redacted evidence images specified in the [evidence guide](docs/evidence-and-screenshots.md).
 
-## Redacted live dashboard evidence
+## Implementation evidence
 
-The live CloudWatch dashboard is captured across three time windows. Account identifiers are excluded; the images show unmodified console views.
+The following redacted captures show the implementation in the same logical order as the lab was built and verified. They are evidence from the running learning environment, not mockups.
+
+### 1. Observe EC2 and host telemetry in one dashboard
+
+The dashboard combines native `AWS/EC2` signals with CloudWatch Agent guest metrics. The three views show recent operational detail and longer-term context.
+
+![One-day dashboard view](screenshots/01-dashboard-1-day.png)
 
 ![Three-day dashboard view](screenshots/02-dashboard-3-day.png)
 
-![Controlled CloudWatch-to-SNS delivery test](screenshots/09-controlled-alarm-email.png)
+![One-week dashboard view](screenshots/03-dashboard-1-week.png)
 
-See the [full evidence gallery](docs/evidence-and-screenshots.md) for one-day, one-week, and post-change views.
+### 2. Correct the root-disk metric dimension mismatch
+
+The Agent was configured to aggregate `disk_used_percent` by `InstanceId`, allowing the dashboard and alarm template to query the same root-disk signal without keeping unnecessary detailed disk series.
+
+![Three-hour dashboard confirmation after the disk-metric correction](screenshots/04-dashboard-post-change-3-hours.png)
+
+![One-hour dashboard confirmation after the disk-metric correction](screenshots/05-dashboard-post-change-1-hour.png)
+
+### 3. Verify the selected CloudWatch Agent metrics
+
+Memory, root-disk, and swap telemetry is visible in the `CWAgent` namespace.
+
+![Focused CloudWatch Agent metrics](screenshots/06-cloudwatch-agent-focused-metrics.png)
+
+### 4. Verify alarm readiness
+
+The CPU, memory, and root-disk alarms are present, in `OK`, and have actions enabled.
+
+![CloudWatch alarm state](screenshots/07-cloudwatch-alarm-state.png)
+
+### 5. Confirm the SNS notification endpoint
+
+The email subscription is confirmed before notification testing. Endpoint and subscription identifiers are redacted.
+
+![Confirmed SNS subscription](screenshots/08-sns-subscription-confirmed.png)
+
+### 6. Test the alert delivery path without generating workload
+
+The existing CPU alarm was temporarily placed in `ALARM` with CloudWatch `SetAlarmState`. The test delivered an SNS email, then CloudWatch returned the alarm to `OK` when it evaluated the real CPU metric.
+
+![SNS-delivered controlled alarm notification](screenshots/09-controlled-alarm-email.png)
+
+![Controlled test in the CloudWatch console](screenshots/11-controlled-test-console.png)
+
+![Controlled test state-transition history](screenshots/12-controlled-test-history.png)
+
+See the [full evidence gallery](docs/evidence-and-screenshots.md) and [live verification record](docs/live-verification.md) for evidence boundaries and technical details.
 
 ## How this project can grow
 
