@@ -31,5 +31,5 @@ Pin the repository on the GitHub profile only after adding at least the dashboar
 
 ## Interview narrative
 
-> I started with EC2’s built-in health signals, then identified the visibility gap for guest memory and disk utilization. I configured the CloudWatch Agent, designed sustained thresholds to reduce alert noise, routed alerts through SNS, and documented the setup as reusable configuration. I also separated live evidence from templates and included cost and security guardrails because operational quality matters as much as the monitoring charts.
+> I started with EC2’s built-in health signals, then identified the visibility gap for guest memory, root-disk, and swap utilization. I configured the CloudWatch Agent, designed workload-appropriate thresholds and documented the responsiveness versus false-positive trade-off, routed alerts through SNS, and documented the setup as reusable configuration. I also separated live evidence from templates and included cost and security guardrails because operational quality matters as much as the monitoring charts.
 

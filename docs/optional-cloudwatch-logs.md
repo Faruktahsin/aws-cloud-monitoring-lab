@@ -4,7 +4,7 @@ The base lab intentionally collects metrics only. Log collection can increase vi
 
 ## Included example
 
-[`config/amazon-cloudwatch-agent-with-logs.example.json`](../config/amazon-cloudwatch-agent-with-logs.example.json) is a complete Agent configuration. It keeps the base memory and disk metrics and adds a single example system-log collection rule.
+[`config/amazon-cloudwatch-agent-with-logs.example.json`](../config/amazon-cloudwatch-agent-with-logs.example.json) is a complete Agent configuration. It keeps the focused memory, root-disk, and swap metric baseline and adds a single example system-log collection rule.
 
 | Setting | Example value | Review before use |
 | --- | --- | --- |
@@ -12,12 +12,13 @@ The base lab intentionally collects metrics only. Log collection can increase vi
 | Log group | `EC2_MONITORING_LOG_GROUP` | Replace with a project-specific name; do not include personal data |
 | Retention | 14 days | Choose the shortest retention period that meets the lab goal |
 | Stream name | `{instance_id}/messages` | Redact instance IDs from public screenshots |
+| Agent user | `root` in this example | Required only when the selected file needs privileged read access; otherwise use the least-privileged compatible identity |
 
 ## Safe enablement checklist
 
 1. Confirm the file path exists on the selected instance and that the file does not contain secrets or sensitive application data.
 2. Replace the example log-group name and review the 14-day retention setting.
-3. Confirm the instance role permits the Agent to deliver log events; do not add static credentials to the Agent configuration.
+3. Confirm the instance role permits the Agent to deliver log events; do not add static credentials to the Agent configuration. Review whether the selected log file requires the example `root` Agent user; use a least-privileged compatible identity when file permissions allow it.
 4. Apply this file as the Agent's complete configuration, then confirm only the intended log group and stream appear in CloudWatch.
 5. Add a cleanup step for the log group when the lab finishes, unless retention is deliberately required.
 
