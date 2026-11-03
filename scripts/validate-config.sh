@@ -76,5 +76,16 @@ for required in "MetricName: CPUUtilization" "MetricName: mem_used_percent" "Met
   fi
 done
 
+# Agent-backed alarms must surface a silent Agent instead of staying OK.
+if grep -Fq "TreatMissingData: notBreaching" "$alarms_file"; then
+  echo "Error: notBreaching hides a stopped CloudWatch Agent; use 'missing' for Agent metrics." >&2
+  exit 1
+fi
+insufficient_count="$(grep -c 'InsufficientDataActions:' "$alarms_file" || true)"
+if [[ "$insufficient_count" -ne 2 ]]; then
+  echo "Error: expected InsufficientDataActions on the memory and root-disk alarms; found $insufficient_count." >&2
+  exit 1
+fi
+
 echo "Three expected alarm definitions detected."
 echo "Configuration checks passed. No AWS resources were created or changed."

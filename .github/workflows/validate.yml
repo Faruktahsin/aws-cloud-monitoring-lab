@@ -21,8 +21,18 @@ jobs:
         run: |
           bash -n scripts/validate-config.sh
           bash -n scripts/deploy-dashboard.sh
+      - name: ShellCheck
+        run: shellcheck scripts/*.sh
+      - name: Lint CloudFormation template
+        run: pipx run --spec "cfn-lint==1.59.0" cfn-lint infrastructure/cloudwatch-alarms.yaml
       - name: Run local configuration checks
         run: bash scripts/validate-config.sh
 
       - name: Validate dashboard dry run
         run: bash scripts/deploy-dashboard.sh --dry-run ec2-monitoring-dashboard i-0123456789abcdef0 eu-central-1
+      - name: Reject malformed dashboard inputs
+        run: |
+          if bash scripts/deploy-dashboard.sh --dry-run ec2-monitoring-dashboard 'i-123/g;s/x' eu-central-1; then
+            echo "Malformed instance ID was accepted." >&2
+            exit 1
+          fi

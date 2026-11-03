@@ -29,5 +29,7 @@ bash scripts/validate-config.sh
 ./scripts/deploy-dashboard.sh --dry-run ec2-monitoring-dashboard i-0123456789abcdef0 eu-central-1
 bash -n scripts/validate-config.sh
 bash -n scripts/deploy-dashboard.sh
+shellcheck scripts/*.sh
+cfn-lint infrastructure/cloudwatch-alarms.yaml
 ```
 

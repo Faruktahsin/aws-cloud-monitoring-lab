@@ -19,6 +19,22 @@ fi
 dashboard_name="$1"
 instance_id="$2"
 region="$3"
+
+# Validate inputs before they reach sed or the AWS CLI. Unvalidated values containing
+# characters such as '/', '&', or quotes would break or alter the rendered dashboard.
+if [[ ! "$dashboard_name" =~ ^[A-Za-z0-9_-]{1,255}$ ]]; then
+  echo "Error: dashboard name may contain only letters, digits, '-' and '_' (max 255)." >&2
+  exit 64
+fi
+if [[ ! "$instance_id" =~ ^i-([0-9a-f]{8}|[0-9a-f]{17})$ ]]; then
+  echo "Error: instance ID must look like i-0123456789abcdef0." >&2
+  exit 64
+fi
+if [[ ! "$region" =~ ^[a-z]{2}(-[a-z]+)+-[0-9]+$ ]]; then
+  echo "Error: region must look like eu-central-1." >&2
+  exit 64
+fi
+
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 rendered_dashboard="$(mktemp)"
 trap 'rm -f "$rendered_dashboard"' EXIT
