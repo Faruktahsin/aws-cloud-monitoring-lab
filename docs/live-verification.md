@@ -20,5 +20,6 @@ This record separates observed live AWS evidence from version-controlled design 
 - The repository does not claim a measured billing reduction; metric and billing usage must be reviewed over a relevant billing period.
 - This is a single-instance learning lab, not a production-scale monitoring service.
 - Optional CloudWatch Logs collection is documented but not represented as enabled live evidence.
+- The `INSUFFICIENT_DATA` notification for the memory and root-disk alarms ([D-006](decision-log.md#d-006-notify-when-agent-metrics-stop-arriving)) was added to the template after this evidence was captured and has not been verified live.
 
 See the [evidence gallery](evidence-and-screenshots.md), [metric catalog](metric-catalog.md), and [decision log](decision-log.md) for the corresponding artifacts and reasoning.

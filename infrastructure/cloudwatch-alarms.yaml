@@ -1,10 +1,14 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Three cost-aware CloudWatch alarms for one EC2 instance and an existing confirmed SNS topic.
+Description: >-
+  Three cost-aware CloudWatch alarms for one EC2 instance and an existing confirmed SNS topic.
+  The memory and root-disk alarms also notify when the CloudWatch Agent stops reporting.
 Parameters:
   InstanceId:
     Type: AWS::EC2::Instance::Id
   SnsTopicArn:
     Type: String
+    AllowedPattern: '^arn:aws[a-z-]*:sns:[a-z0-9-]+:[0-9]{12}:[A-Za-z0-9_-]{1,256}$'
+    ConstraintDescription: Must be the ARN of an existing standard SNS topic.
   CpuThreshold:
     Type: Number
     Default: 80
@@ -44,9 +48,13 @@ Resources:
       DatapointsToAlarm: 1
       Threshold: !Ref MemoryThreshold
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
+      # Agent metrics: missing data means the Agent, its role, or the host stopped reporting.
+      # Leave it missing so the alarm moves to INSUFFICIENT_DATA and notifies, instead of
+      # staying OK while the guest is unobserved (notBreaching would hide that).
+      TreatMissingData: missing
       AlarmActions: [!Ref SnsTopicArn]
       OKActions: [!Ref SnsTopicArn]
+      InsufficientDataActions: [!Ref SnsTopicArn]
   HighDiskAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
@@ -60,7 +68,11 @@ Resources:
       DatapointsToAlarm: 1
       Threshold: !Ref DiskThreshold
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      TreatMissingData: notBreaching
+      # Agent metrics: missing data means the Agent, its role, or the host stopped reporting.
+      # Leave it missing so the alarm moves to INSUFFICIENT_DATA and notifies, instead of
+      # staying OK while the guest is unobserved (notBreaching would hide that).
+      TreatMissingData: missing
       AlarmActions: [!Ref SnsTopicArn]
       OKActions: [!Ref SnsTopicArn]
+      InsufficientDataActions: [!Ref SnsTopicArn]
 
